@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const pathModule = require('path')
 const axios = require('axios');
 
 function getLinksFromFile(path) {
@@ -32,25 +32,20 @@ function getLinksFromFile(path) {
 }
 
 function readDirectory(path) {
-  return new Promise((resolve) => {
-    try {
-      const fileList = fs.readdirSync(path);
-      const filteredList = fileList.filter((file) => path.extname(file) === '.md');
-
-      const promises = filteredList.map((file) => {
-        const filePath = path.join(path, file);
-        return getLinksFromFile(filePath);
-      });
-
-      Promise.all(promises).then(() => {
-        resolve();
-      });
-    } catch (err) {
-      console.error('Erro ao ler diretórios', err);
-      resolve(); // Continuar resolvendo mesmo em caso de erro
-    }
-  });
+  try {
+    const fileList = fs.readdirSync(path);
+    const filteredList = fileList.filter((file) => pathModule.extname(file) === '.md');
+    const promises = filteredList.map((file) => {
+      const filePath = pathModule.join(path, file);
+      return getLinksFromFile(filePath);
+    });
+    return Promise.all(promises);
+  } catch (err) {
+    console.error('Erro ao ler diretórios', err);
+    return Promise.resolve([]);
+  }
 }
+
 
 function mdLinks(path) {
   return new Promise((resolve) => {
@@ -59,12 +54,16 @@ function mdLinks(path) {
         if (stats.isFile()) {
           resolve(getLinksFromFile(path));
         } else if (stats.isDirectory()) {
-          resolve(readDirectory(path));
+          readDirectory(path).then((results) => {
+            const linksArray = results.reduce((accumulator, links) => accumulator.concat(links), []);
+            resolve(linksArray);
+          });
         }
       }
     });
   });
 }
+
 
 // retorna os links de um arquivo específico (como objetos)
 
