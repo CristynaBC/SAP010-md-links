@@ -6,11 +6,9 @@ function getLinksFromFile(path) {
   return new Promise((resolve, reject) => {
     fs.readFile(path, (err, fileContent) => {
       if (err) {
-        reject(console.error(`Erro ao retornar arquivos: ${err}`));
+        reject(new Error(`Erro ao retornar arquivos: ${err.message}`));
       } else if (!path.endsWith('.md')) {
-        reject(
-          console.error('O caminho de entrada não corresponde a um arquivo .md'),
-        );
+        reject(new Error('O caminho de entrada não corresponde a um arquivo .md'));
       } else {
         const regex = /\[([^[\]]+)\]\(([^()\s]+|\S+)?\)/g;
         const strFiles = fileContent.toString();
@@ -27,7 +25,6 @@ function getLinksFromFile(path) {
           };
           links.push(link);
         });
-
         resolve(links);
       }
     });
@@ -35,20 +32,24 @@ function getLinksFromFile(path) {
 }
 
 function readDirectory(path) {
-  try {
-    const fileList = fs.readdirSync(path);
+  return new Promise((resolve) => {
+    try {
+      const fileList = fs.readdirSync(path);
+      const filteredList = fileList.filter((file) => path.extname(file) === '.md');
 
-    const filteredList = fileList.filter(
-      (file) => path.extname(file) === '.md',
-    );
+      const promises = filteredList.map((file) => {
+        const filePath = path.join(path, file);
+        return getLinksFromFile(filePath);
+      });
 
-    filteredList.forEach((file) => {
-      const filePath = path.join(path, file);
-      getLinksFromFile(filePath);
-    });
-  } catch (err) {
-    console.error('Erro ao ler diretórios', err);
-  }
+      Promise.all(promises).then(() => {
+        resolve();
+      });
+    } catch (err) {
+      console.error('Erro ao ler diretórios', err);
+      resolve(); // Continuar resolvendo mesmo em caso de erro
+    }
+  });
 }
 
 function mdLinks(path) {
@@ -94,4 +95,6 @@ function getHTTPStatus(linksObject) {
 module.exports = {
   mdLinks,
   getHTTPStatus,
+  getLinksFromFile,
+  readDirectory,
 };
