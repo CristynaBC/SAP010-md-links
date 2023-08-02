@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 
 const chalk = require('chalk');
 const { mdLinks, getHTTPStatus } = require('./index');

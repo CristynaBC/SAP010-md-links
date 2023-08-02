@@ -1,10 +1,14 @@
 {
-  "name": "md-links",
-  "Description": "Extração e verificação de links dentro de arquivos .md",
+  "name": "md-links-cristyna",
+  "description": "Extração e verificação de links dentro de arquivos .md",
   "author": "Cristyna Costa <cristynabcosta@gmail.com> (https://github.com/CristynaBC)",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "main": "cli.js",
   "engines": {
     "node": ">=16.x"
+  },
+  "bin": {
+    "md-links": "./cli.js"
   },
   "bootcamp": {
     "createdAt": "2023-06-19T12:25:44.680Z",
@@ -12,7 +16,6 @@
     "commit": "c17498042fc79734cec390e6314cbe810e95bf4c"
   },
   "scripts": {
-    "pretest": "npm run eslint",
     "test": "jest --coverage",
     "eslint": "eslint --ext .js src/ test/"
   },
@@ -23,15 +26,19 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^16.0.1",
     "eslint-plugin-promise": "^6.1.1",
-    "jest": "^29.6.1"
+    "jest": "^29.6.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/CristynaBC/SAP010-md-links.git"
   },
   "dependencies": {
+    "-": "^0.0.1",
+    "@jest/globals": "^29.6.1",
     "axios": "^1.4.0",
     "chalk": "^4.1.2",
+    "g": "^2.0.1",
+    "md-links-cristyna": "^0.1.1",
     "mkdirp": "^3.0.1"
   }
 }
