@@ -96,4 +96,7 @@ module.exports = {
   getHTTPStatus,
   getLinksFromFile,
   readDirectory,
-};
+}
+
+
+// teste computador novo 
