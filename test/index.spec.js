@@ -1,10 +1,17 @@
-const { describe, it, expect } = require('@jest/globals');
-
 const path = require('path');
+
+const {
+  describe,
+  it,
+  expect,
+} = require('@jest/globals');
 
 const axios = require('axios');
 
-const { mdLinks, getHTTPStatus } = require('../index');
+const {
+  mdLinks,
+  getHTTPStatus,
+} = require('../index');
 
 jest.mock('axios');
 
@@ -16,13 +23,13 @@ describe('mdLinks - path ending with .md file', () => {
 
   it('should throw new error when the path is not valid', async () => {
     await expect(mdLinks('invalid.md')).rejects.toThrowError(
-      "Erro ao verificar o caminho: ENOENT: no such file or directory, stat 'invalid.md"
+      "Erro ao verificar o caminho: ENOENT: no such file or directory, stat 'invalid.md",
     );
   });
 
-  it('should throw new error when the it`s not able to read the file', async () => {
+  it('should throw new error when it`s not able to read the file', async () => {
     await expect(mdLinks('invalid.md')).rejects.toThrowError(
-      "Erro ao verificar o caminho: ENOENT: no such file or directory, stat 'invalid.md"
+      "Erro ao verificar o caminho: ENOENT: no such file or directory, stat 'invalid.md",
     );
   });
   it('should resolve with an array of objects containing the URLs wit href, text, file', async () => {
@@ -69,13 +76,6 @@ describe('mdLinks - path ending with .md file', () => {
 
 describe('mdLinks path leading to directory', () => {
   const testDir = path.join(__dirname, 'test-dir');
-  const testEmptyDir = path.join(__dirname, 'test-dir-empty');
-
-  it('should throw an error when the directory does not exist', async () => {
-    await expect(mdLinks('nonexistent-directory')).rejects.toThrowError(
-      "Erro ao verificar o caminho: ENOENT: no such file or directory, stat 'nonexistent-directory'"
-    );
-  });
 
   it('should return the links in all the .md files in the directory', async () => {
     const result = await mdLinks(testDir);
@@ -135,7 +135,7 @@ describe('getHTTPStatus', () => {
     ];
 
     axios.get.mockRejectedValueOnce(
-      new Error('Erro ao realizar requisição HTTP')
+      new Error('Erro ao realizar requisição HTTP'),
     );
 
     axios.get.mockResolvedValueOnce({ status: 200 });

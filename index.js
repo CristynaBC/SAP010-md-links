@@ -33,27 +33,22 @@ function mdLinks(path) {
         try {
           const fileList = fs.readdirSync(path);
           const filteredList = fileList.filter(
-            (file) => pathModule.extname(file) === '.md'
+            (file) => pathModule.extname(file) === '.md',
           );
-          const promises = filteredList.map((file) =>
-            mdLinks(pathModule.join(path, file))
-          );
+          const promises = filteredList.map((file) => mdLinks(pathModule.join(path, file)));
           Promise.all(promises)
             .then((results) => {
               const linksArray = results.reduce(
                 (accumulator, links) => accumulator.concat(links),
-                []
+                [],
               );
               resolve(linksArray);
-            })
-            .catch((error) => {
-              reject(new Error(`Erro ao processar promessas no diretório ${path}: ${error.message}`));
             });
         } catch (error) {
-          reject(new Error(`Erro ao ler o diretório: ${path}: ${error.message}`));
+          reject(
+            new Error(`Erro ao ler o diretório: ${path}: ${error.message}`),
+          );
         }
-      } else {
-        resolve([]);
       }
     });
   });
@@ -63,27 +58,25 @@ function mdLinks(path) {
 
 function getHTTPStatus(linksObject) {
   let brokenCount = 0;
-  const linkPromises = linksObject.map((links) =>
-    axios
-      .get(links.href)
-      .then((response) => {
-        const updatedLinks = { ...links, status: response.status };
-        if (response.status >= 200 && response.status < 300) {
-          updatedLinks.ok = 'Ok';
-        } else if (response.status >= 300) {
-          updatedLinks.ok = 'FAIL';
-          brokenCount += 1;
-        }
-        return updatedLinks;
-      })
-      .catch(() => {
-        const updatedLinks = { ...links };
-        updatedLinks.status = 'Erro ao realizar requisição HTTP';
+  const linkPromises = linksObject.map((links) => axios
+    .get(links.href)
+    .then((response) => {
+      const updatedLinks = { ...links, status: response.status };
+      if (response.status >= 200 && response.status < 300) {
+        updatedLinks.ok = 'Ok';
+      } else if (response.status >= 300) {
         updatedLinks.ok = 'FAIL';
         brokenCount += 1;
-        return updatedLinks;
-      })
-  );
+      }
+      return updatedLinks;
+    })
+    .catch(() => {
+      const updatedLinks = { ...links };
+      updatedLinks.status = 'Erro ao realizar requisição HTTP';
+      updatedLinks.ok = 'FAIL';
+      brokenCount += 1;
+      return updatedLinks;
+    }));
 
   return Promise.all(linkPromises).then((updLinks) => ({
     linksObject: updLinks,
