@@ -19,7 +19,7 @@ function printLinks(linksObject) {
       console.log(chalk.blue(`status: ${link.status}`));
       console.log(chalk.green(`ok: ${link.ok} \n`));
       console.log(
-        '------------------------------------------------------------------------',
+        '------------------------------------------------------------------------'
       );
     } else if (link.ok === 'FAIL') {
       console.log(chalk.cyan(`\nhref: ${link.href} `));
@@ -28,25 +28,35 @@ function printLinks(linksObject) {
       console.log(chalk.red(`status: ${link.status}`));
       console.log(chalk.bgRed(`ok: ${link.ok} \n`));
       console.log(
-        '------------------------------------------------------------------------',
+        '------------------------------------------------------------------------'
       );
     } else {
       console.log(chalk.cyan(`\nhref: ${link.href} `));
       console.log(chalk.yellow(`text: ${link.text}`));
       console.log(chalk.magenta(`file: ${link.file} \n`));
       console.log(
-        '------------------------------------------------------------------------',
+        '------------------------------------------------------------------------'
       );
     }
   });
 }
 
 mdLinks(path, options).then((linksObject) => {
-  if (options.validate) {
+  if (options.validate && !options.stats) {
     getHTTPStatus(linksObject).then((result) => {
       printLinks(result.linksObject);
     });
-  } else if (options.stats) {
+  } else if (options.stats && !options.validate) {
+    const uniqueLinks = [...new Set(linksObject.map((link) => link.href))]
+      .length;
+
+    const stats = {
+      'Unique Links': uniqueLinks,
+      'Total Links': linksObject.length,
+    };
+
+    console.table(stats);
+  } else if (options.stats && options.validate) {
     getHTTPStatus(linksObject).then((result) => {
       const failStatCount = result.brokenCount;
 

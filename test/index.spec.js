@@ -105,9 +105,6 @@ describe('mdLinks path leading to directory', () => {
 });
 
 describe('getHTTPStatus', () => {
-  it('should be a function', () => {
-    expect(typeof getHTTPStatus).toBe('function');
-  });
   it('should return correct status for successful HTTP requests', async () => {
     const linksObject = [
       { href: 'https://www.example.com/link1' },
