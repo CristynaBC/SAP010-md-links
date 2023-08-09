@@ -5,3 +5,5 @@
 [GitHub](https://github.com/)
 
 [MDN Web Docs](https://developer.mozilla.org/pt-BR/)
+
+[Broken Link](https//asdasdasdasd.com)

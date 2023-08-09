@@ -2,7 +2,7 @@
   "name": "md-links-cristyna",
   "description": "Extração e verificação de links dentro de arquivos .md",
   "author": "Cristyna Costa <cristynabcosta@gmail.com> (https://github.com/CristynaBC)",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "main": "cli.js",
   "engines": {
     "node": ">=16.x"
@@ -38,7 +38,6 @@
     "axios": "^1.4.0",
     "chalk": "^4.1.2",
     "g": "^2.0.1",
-    "md-links-cristyna": "^0.1.1",
     "mkdirp": "^3.0.1"
   }
 }
