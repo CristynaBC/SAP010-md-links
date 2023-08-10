@@ -17,7 +17,7 @@ O **MD-Links** é uma ferramenta de linha de comando (CLI) desenvolvida utilizan
 1. Abra o terminal
 2. Execute o seguinte comando para instalar o MD-Links globalmente:
 ```bash
-npm install -g md-links
+npm install -g md-links-cristyna
 ```
 ### 3.3 Uso
 
